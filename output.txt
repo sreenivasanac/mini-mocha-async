@@ -1,0 +1,14 @@
+"2 is 2 should build correct uri with set parameters : Pass"
+
+"True Or False?  are truthy =>  non empty array : Pass"
+
+"True Or False?  are truthy =>  empty object : Pass"
+
+"True Or False?  are falsy =>  undefined : Pass"
+
+"True Or False?  are falsy =>  empty array : Fail"
+false == true
+
+"True Or False?  are falsy =>  Nan : Pass"
+
+"True Or False?  are falsy =>  empty string : Pass"
