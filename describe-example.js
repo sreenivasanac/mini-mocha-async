@@ -9,25 +9,24 @@ function log() {
     console.log.apply(console, arguments);
 }
 
+var obj = {};
 describe('True Or False? ', function(){
     describe('is', function() {
         describe('setup', function () {
             it('should setup num', function () {
-                assert.equal(this.num, 2);
+                assert.equal(obj.num, 2);
             });
             setup(function () {
-                console.log('setup done');
-                this.num = 2;
+                obj.num = 2;
             });
             teardown(function () {
-                console.log('teardown down');
-                this.num = null;
+                obj.num = null;
             });
         });
 
         describe('teardown', function () {
             it('should teardown num', function () {
-                assert.equal(this.num, null);
+                assert.equal(obj.num, null);
             });
         });
 
@@ -53,6 +52,9 @@ describe('True Or False? ', function(){
                 });
             });
 
+            it('empty array', function() {
+                assert.equal(![], true);
+            });
             it('NaN', function() {
                 assert.equal(!NaN, true);
             });
