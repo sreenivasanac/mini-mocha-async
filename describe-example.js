@@ -9,15 +9,6 @@ function log() {
     console.log.apply(console, arguments);
 }
 
-// describe('2 is 2', function() {
-//     setup(function() {
-//         this.num = 2;
-//     });
-//     it('should build correct uri with set parameters', function() {
-//         assert.equal(this.num, 2);
-//     });
-// });
-
 describe('True Or False? ', function(){
     describe('is', function() {
         describe('setup', function () {
@@ -31,13 +22,13 @@ describe('True Or False? ', function(){
             teardown(function () {
                 console.log('teardown down');
                 this.num = null;
-            })
-        })
+            });
+        });
 
         describe('teardown', function () {
             it('should teardown num', function () {
                 assert.equal(this.num, null);
-            })
+            });
         });
 
         describe('truthy => ', function() {
@@ -59,23 +50,15 @@ describe('True Or False? ', function(){
                 });
                 it('null', function() {
                     assert.equal(!null, true);
-                })
+                });
             });
 
-            it('empty array', function() {
-                assert.equal(![], true);
-            });
             it('NaN', function() {
                 assert.equal(!NaN, true);
             });
             it('empty string', function() {
                 assert.equal(!'', true);
             });
-        })
+        });
     });
 });
-
-
-/*
- How would one start with this.
- */
