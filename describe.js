@@ -1,80 +1,60 @@
-var describeTest = (function () {
-  var stack = [],
-    ctx = {},
-    activity = {
-      setup: function (fn) { fn.call(ctx); },
-      teardown: function (fn) { fn.call(ctx); },
-      describe: function (args /* [title, testfn] */) {
-        log(test_title(stack, args[0]));
-        exec_describe(args[0], args[1]);
-      },
-      tests: function (args /* [title, testfn] */) {
-        reportTests(args[1], args[0]);
-      }
-    };
+const success = desc => console.log(`${desc} : Pass`);
+const failure = (desc, msg) => console.log(`:( ${desc} : Fail => ${msg}`);
+const log = desc => console.log(desc);
 
-  return {
-    setup: spush.bind(null, 'setup'),
-    teardown: spush.bind(null, 'teardown'),
-    describe: describe,
-    it: function (desc, fn) { spush('tests', [desc, fn]); }
-  };
+const activity = {};
+const stack = [];
+const isEmptyStack = () => stack.length === 0;
+const stackTop = () => stack[stack.length - 1];
+const ctx = {};
 
-  function describe(title, testfn) {
-    if (stack.length != 0) {
-      return spush('describe', [title, testfn]);
+const spush = (key, val) => stackTop()[key].push(val);
+
+const indentedTitle = ctxt =>
+  `${stack.map(() => '   ').join('')}${ctxt}`;
+
+const newTop = title =>
+  ({ title, tests: [], setup: [], teardown: [], describe: [] });
+
+const execTop = () => 'setup tests describe teardown'.split(' ')
+  .forEach(key => stackTop()[key].forEach(activity[key]));
+
+const execDescribe = (title, describeFn) => {
+  log(indentedTitle(title));
+  stack.push(newTop(title));
+  describeFn.call(ctx);   // collect describe, setup, teardown and it.
+  execTop();              // execute them
+  stack.pop();
+};
+
+const reportTests = (fn, title) => {
+  const desc = indentedTitle(title);
+
+  try {
+    fn.call(ctx);
+    success(desc);
+  } catch (e) {
+    failure(desc, e.message);
+  }
+};
+
+activity.setup = fn => fn.call(ctx);
+activity.teardown = fn => fn.call(ctx);
+activity.describe = ([title, testFn]) =>
+  execDescribe(title, testFn);
+activity.tests = ([title, testFn]) =>
+  reportTests(testFn, title);
+
+export default {
+  setup: spush.bind(null, 'setup'),
+  teardown: spush.bind(null, 'teardown'),
+  describe: (title, testfn) => {
+    if (isEmptyStack()) {
+      execDescribe(title, testfn);
+      return;
     }
-    exec_describe(title, testfn);
-  }
-  function spush(key, val) {
-    stack[stack.length - 1][key].push(val);
-  }
 
-  function exec_describe(title, tfn) {
-    stack.push(new_top(title));
-    tfn.call(ctx); // collect describe, setup, teardown and it.
-    exec_top();  // execute them
-    stack.pop();
-  }
-  function new_top(title) {
-    return { title: title, tests: [], setup: [], teardown: [], describe: [] };
-  }
-  function exec_top() {
-    'setup tests describe teardown'.split(' ').map(sexec);
-  }
-  function sexec(key) {
-    var top = stack[stack.length - 1];
-    top[key].forEach(activity[key]);
-  }
-
-  function reportTests(fn, desc) {
-    desc = test_title(stack, desc);
-    try {
-      fn.call(ctx);
-      success(desc);
-    } catch (e) {
-      failure(desc, e.message);
-    }
-  }
-  function test_title(stack, ctxt) {
-    var indent = stack.map(function () { return '    '; });
-    return indent.slice(1).concat([ctxt]).join(' ');
-    // return pluck(stack, 'title').concat([ctxt]).join(' ');
-  }
-} ());
-
-module.exports = describeTest;
-
-function success(desc) {
-  console.log(desc + ' : Pass');
-}
-function failure(desc, msg) {
-  console.log(':(' + desc + ' : Fail => ' + msg);
-}
-function log(desc) {
-  console.log(desc);
-}
-
-function pluck(arr, key) {
-  return arr.map(function (v) { return v[key]; });
-}
+    spush('describe', [title, testfn]);
+  },
+  it: (desc, fn) => spush('tests', [desc, fn])
+};
