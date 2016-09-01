@@ -1,50 +1,47 @@
-var assert = require('assert');
-var tfns = require('./describe-compiled.js').default,
-  describe = tfns.describe,
-  setup = tfns.setup,
-  teardown = tfns.teardown,
-  test = tfns.it;
+import assert from 'assert';
+import {
+  it as test,
+  describe as testSuite,
+  setup,
+  teardown
+} from './describe';
 
-function log() {
-  console.log.apply(console, arguments);
-}
-
-var obj = {};
-describe('True Or False? ', function () {
-  describe('setup', function () {
-    test('should setup num', function () {
+const obj = {};
+testSuite('True Or False? ', () => {
+  testSuite('setup', () => {
+    test('should setup num', () => {
       assert.equal(obj.num, 2);
     });
-    setup(function () {
+    setup(() => {
       obj.num = 2;
     });
-    teardown(function () {
+    teardown(() => {
       obj.num = null;
     });
   });
 
-  describe('teardown', function () {
-    test('should teardown num', function () {
+  testSuite('teardown', () => {
+    test('should teardown num', () => {
       assert.equal(obj.num, null);
     });
   });
 
-  describe('truthy => ', function () {
-    test('empty array', function () {
+  testSuite('truthy => ', () => {
+    test('empty array', () => {
       assert.equal(!![0], true);
     });
 
-    test('empty object', function () {
+    test('empty object', () => {
       assert.equal(!!{}, true);
     });
   });
 
-  describe('falsy => ', function () {
-    describe('undefined & nil', function () {
-      test('undefined', function () {
+  testSuite('falsy => ', () => {
+    testSuite('undefined & nil', () => {
+      test('undefined', () => {
         assert.equal(!(void 0), true);
       });
-      test('null', function () {
+      test('null', () => {
         assert.equal(!null, true);
       });
     });
@@ -53,10 +50,10 @@ describe('True Or False? ', function () {
       assert.equal(![], true);
     });
 
-    test('!NaN === true', function () {
+    test('!NaN === true', () => {
       assert.equal(!NaN, true);
     });
-    test('!(empty string) === true', function () {
+    test('!(empty string) === true', () => {
       assert.equal(!'', true);
     });
   });

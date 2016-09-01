@@ -10,7 +10,7 @@
   },
   "devDependencies": {},
   "scripts": {
-      "start": "babel describe.js -o describe-compiled.js && node describe-example.js"
+    "start": "babel-node describe-example.js"
   },
   "repository": {
     "type": "git",

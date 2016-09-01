@@ -45,16 +45,14 @@ activity.describe = ([title, testFn]) =>
 activity.tests = ([title, testFn]) =>
   reportTests(testFn, title);
 
-export default {
-  setup: spush.bind(null, 'setup'),
-  teardown: spush.bind(null, 'teardown'),
-  describe: (title, testfn) => {
-    if (isEmptyStack()) {
-      execDescribe(title, testfn);
-      return;
-    }
+export const it = (desc, fn) => spush('tests', [desc, fn]);
+export const describe = (title, testfn) => {
+  if (isEmptyStack()) {
+    execDescribe(title, testfn);
+    return;
+  }
 
-    spush('describe', [title, testfn]);
-  },
-  it: (desc, fn) => spush('tests', [desc, fn])
+  spush('describe', [title, testfn]);
 };
+export const setup = spush.bind(null, 'setup');
+export const teardown = spush.bind(null, 'teardown');
