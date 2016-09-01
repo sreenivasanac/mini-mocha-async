@@ -1,10 +1,5 @@
 import assert from 'assert';
-import {
-  it as test,
-  describe as testSuite,
-  setup,
-  teardown
-} from './describe';
+import { test, testSuite, setup, teardown } from './describe';
 
 const obj = {};
 testSuite('True Or False? ', () => {
