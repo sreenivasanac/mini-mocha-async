@@ -39,14 +39,24 @@ const reportTests = (fn, title) => {
 };
 
 activity.setup = fn => fn.call(ctx);
+activity.async = fn => fn && fn.length;
 activity.teardown = fn => fn.call(ctx);
 activity.testSuites = ([title, testFn]) =>
   execTestSuite(title, testFn);
 activity.tests = ([title, testFn]) =>
   reportTests(testFn, title);
 
-export const test = (desc, fn) => spush('tests', [desc, fn]);
-export const testSuite = (title, testfn) => {
+
+
+export const test = (desc, fn) => {
+  function done(err = '') {
+    console.log("done");
+  }
+  // console.log("test")
+  spush('tests', [desc, fn]);
+};
+
+export const testSuite = (title, testfn) => { 
   if (isEmptyStack()) {
     execTestSuite(title, testfn);
     return;

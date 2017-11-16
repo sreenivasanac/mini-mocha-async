@@ -2,10 +2,21 @@ import assert from 'assert';
 import { test, testSuite, setup, teardown } from './describe';
 
 const obj = {};
+
 testSuite('True Or False? ', () => {
   testSuite('setup', () => {
     test('should setup num', () => {
-      assert.equal(obj.num, 2);
+      setTimeout(() => {
+        try {
+          console.log("try");
+          assert.equal(obj.num, 2);
+          // console.log("test");
+          done(''); // success case
+        } catch (err) {
+          console.log("err")
+          // done(err); // error case
+        }
+      });
     });
     setup(() => {
       obj.num = 2;
@@ -15,41 +26,41 @@ testSuite('True Or False? ', () => {
     });
   });
 
-  testSuite('teardown', () => {
-    test('should teardown num', () => {
-      assert.equal(obj.num, null);
-    });
-  });
+  // testSuite('teardown', () => {
+  //   test('should teardown num', () => {
+  //     assert.equal(obj.num, null);
+  //   });
+  // });
 
-  testSuite('truthy => ', () => {
-    test('empty array', () => {
-      assert.equal(!![0], true);
-    });
+  // testSuite('truthy => ', () => {
+  //   test('empty array', () => {
+  //     assert.equal(!![0], true);
+  //   });
 
-    test('empty object', () => {
-      assert.equal(!!{}, true);
-    });
-  });
+  //   test('empty object', () => {
+  //     assert.equal(!!{}, true);
+  //   });
+  // });
 
-  testSuite('falsy => ', () => {
-    testSuite('undefined & nil', () => {
-      test('undefined', () => {
-        assert.equal(!(void 0), true);
-      });
-      test('null', () => {
-        assert.equal(!null, true);
-      });
-    });
+  // testSuite('falsy => ', () => {
+  //   testSuite('undefined & nil', () => {
+  //     test('undefined', () => {
+  //       assert.equal(!(void 0), true);
+  //     });
+  //     test('null', () => {
+  //       assert.equal(!null, true);
+  //     });
+  //   });
 
-    test('should test ![] === true ', () => {
-      assert.equal(![], true);
-    });
+  //   test('should test ![] === true ', () => {
+  //     assert.equal(![], true);
+  //   });
 
-    test('!NaN === true', () => {
-      assert.equal(!NaN, true);
-    });
-    test('!(empty string) === true', () => {
-      assert.equal(!'', true);
-    });
-  });
+  //   test('!NaN === true', () => {
+  //     assert.equal(!NaN, true);
+  //   });
+  //   test('!(empty string) === true', () => {
+  //     assert.equal(!'', true);
+  //   });
+  // });
 });

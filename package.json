@@ -6,11 +6,13 @@
   "dependencies": {
     "babel-cli": "6.14.0",
     "babel-preset-es2015": "6.14.0",
-    "babel-preset-stage-0": "6.5.0"
+    "babel-preset-stage-0": "6.5.0",
+    "mocha": "^4.0.1"
   },
   "devDependencies": {},
   "scripts": {
-    "start": "babel-node describe-example.js"
+    "start": "babel-node describe-example.js",
+    "test": "mocha"
   },
   "repository": {
     "type": "git",
